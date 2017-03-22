@@ -1,0 +1,4 @@
+In order to run the node application:
+1. npm install
+2. In the Nucleus application change the Constants.FIWARE_ADDRESS to match your local ip address
+2. node index.js
