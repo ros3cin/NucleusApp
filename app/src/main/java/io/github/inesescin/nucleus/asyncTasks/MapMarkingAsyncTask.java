@@ -32,7 +32,8 @@ public class MapMarkingAsyncTask extends AsyncTask<Void, Void,  Map<String, Nucl
         Map<String, Nucleus> ecopoints = new HashMap<>();
         try{
             String stringResponse = fiwareConnection.getEntityByType(Constants.FIWARE_ADDRESS, "Nucleus");
-            ecopoints = parseJsonToNucleusArray(ecopoints, stringResponse);
+            //ecopoints = parseJsonToNucleusArray(ecopoints, stringResponse);//java
+            ecopoints = ndkParseJsonToNucleusArray(ecopoints,stringResponse);//ndk
         }
         catch(Exception e){
             e.printStackTrace();
@@ -56,10 +57,13 @@ public class MapMarkingAsyncTask extends AsyncTask<Void, Void,  Map<String, Nucl
             nucleus.setValue(Double.parseDouble(attributes.getJSONObject(1).getString("value")));
             nucleus.setStatus(attributes.getJSONObject(2).getString("value")); //status
             ecopoints.put(nucleus.getId(), nucleus);
-
         }
         return ecopoints;
     }
+    static {
+        System.loadLibrary("native-lib");
+    }
+    public native Map<String, Nucleus> ndkParseJsonToNucleusArray(Map<String, Nucleus> ecopoints, String stringResponse);
 
     @Override
     protected void onPostExecute(Map<String, Nucleus> ecopoints) {
