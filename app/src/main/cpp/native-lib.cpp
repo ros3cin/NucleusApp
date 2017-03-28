@@ -41,10 +41,23 @@ Java_io_github_inesescin_nucleus_asyncTasks_MapMarkingAsyncTask_ndkParseJsonToNu
         std::string status = attributes[2]["value"];
         jdouble doubleValue = atof(value.c_str());
 
-        env->CallVoidMethod(nucleus,nucleusClass_setCoordinates,env->NewStringUTF(coordinates.c_str()));
+        jstring localRef;
+        localRef = env->NewStringUTF(coordinates.c_str());
+        env->CallVoidMethod(nucleus,nucleusClass_setCoordinates,localRef);
+        env->DeleteLocalRef(localRef);
+
         env->CallVoidMethod(nucleus,nucleusClass_setValue,doubleValue);
-        env->CallVoidMethod(nucleus,nucleusClass_setStatus,env->NewStringUTF(status.c_str()));
-        env->CallObjectMethod(ecopointsMap,mapClass_putMethod,env->NewStringUTF(id.c_str()),nucleus);
+
+        localRef = env->NewStringUTF(status.c_str());
+        env->CallVoidMethod(nucleus,nucleusClass_setStatus,localRef);
+        env->DeleteLocalRef(localRef);
+
+        localRef = env->NewStringUTF(id.c_str());
+        env->CallObjectMethod(ecopointsMap,mapClass_putMethod,localRef,nucleus);
+        env->DeleteLocalRef(localRef);
+
+        env->DeleteLocalRef(nucleus);
+
         //__android_log_print(ANDROID_LOG_DEBUG,"LOG_TAG","JSON INFO:\nId: %s Coordinates: %s Value: %s Status: %s\n", id.c_str(),coordinates.c_str(),value.c_str(),status.c_str());
     }
 

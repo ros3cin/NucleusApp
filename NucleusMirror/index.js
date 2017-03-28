@@ -5,6 +5,21 @@ var bodyParser = require('body-parser')
 var app     = express();
 var myPort=1026;
 
+function createElements(){
+  var elements = [];
+  for(var i = 1; i <= 100; i++){
+    elements = elements.concat({
+      contextElement : {
+        id : i+"",
+        attributes : [{value:"2,3"},{value:"1.2"},{value: "broken"}]
+      }
+    });
+  }
+  return elements;
+}
+
+var postJSON = {contextResponses : createElements()};
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -20,20 +35,7 @@ app.get('/v1/contextEntities/:entityId/attributes/:attributeName', function (req
 
 app.post('/v1/queryContext/', function (req, res) {
   console.log(req.body);
-  res.send({contextResponses : [
-  	{
-  		contextElement: {
-  			id : "1",
-  			attributes : [{value:"2,3"},{value:"1.2"},{value: "online"}]
-  		}
-  	},
-  	{
-  		contextElement: {
-  			id : "2",
-  			attributes : [{value:"3,2"},{value:"2.2"},{value: "offline"}]
-  		}
-  	}
-  	]});
+  res.send(postJSON);
 });
 
 

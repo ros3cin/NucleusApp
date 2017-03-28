@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -23,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private String nucleusId;
     private double value;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

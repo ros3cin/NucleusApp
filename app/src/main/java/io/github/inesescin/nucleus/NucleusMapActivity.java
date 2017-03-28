@@ -1,5 +1,6 @@
 package io.github.inesescin.nucleus;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -8,6 +9,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -59,6 +62,8 @@ public class NucleusMapActivity extends FragmentActivity implements DirectionCal
     private List<Marker> exitMarkers;
     private FloatingActionButton fabDirections;
     private List<LatLng> orderedWaypoints;
+    private WebView webView;
+    private Activity activitySelf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,12 @@ public class NucleusMapActivity extends FragmentActivity implements DirectionCal
         setContentView(R.layout.activity_nucleus_map);
         setActivityEnvironment();
         selectedMarkers = new ArrayList<>();
+        webView = new WebView(this);
+        webView.loadUrl("file:///android_asset/www/index.html");
+        webView.setVisibility(View.INVISIBLE);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        activitySelf=this;
     }
 
     private void setActivityEnvironment() {
@@ -226,7 +237,7 @@ public class NucleusMapActivity extends FragmentActivity implements DirectionCal
                     @Override
                     public void run() {
                         if(!isSelectingEntry && !isSelectingExit) {
-                            MapMarkingAsyncTask mapMarkingAsyncTask = new MapMarkingAsyncTask(NucleusMapActivity.this);
+                            MapMarkingAsyncTask mapMarkingAsyncTask = new MapMarkingAsyncTask(NucleusMapActivity.this,activitySelf,webView);
                             mapMarkingAsyncTask.execute();
                         }
                     }
